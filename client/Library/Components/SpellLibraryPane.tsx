@@ -8,7 +8,7 @@ import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
 import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ListingRow, MakeEditButton } from "./ListingRow";
 import { SpellDetails } from "./SpellDetails";
 
 export type SpellLibraryPaneProps = {
@@ -54,7 +54,7 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
       }
       name={listing.Listing().Name}
       onAdd={this.loadSavedSpell}
-      onEdit={this.editSpell}
+      buttons={[MakeEditButton(this.editSpell)]}
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={listing}

@@ -11,7 +11,7 @@ import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
 import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
-import { ExtraButton, ListingRow } from "./ListingRow";
+import { ButtonInfo, ListingRow, MakeEditButton } from "./ListingRow";
 
 export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -99,14 +99,14 @@ export class StatBlockLibraryPane extends React.Component<
       name={l.Listing().Name}
       showCount
       onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
-      onEdit={this.editStatBlock}
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={l}
-      extraButtons={
-        CurrentSettings().Rules.EnableBossAndMinionHP &&
-        this.bossAndMinionButtons
-      }
+      buttons={[
+        ...(CurrentSettings().Rules.EnableBossAndMinionHP &&
+          this.bossAndMinionButtons),
+        MakeEditButton(this.editStatBlock)
+      ]}
     />
   );
 
@@ -126,7 +126,7 @@ export class StatBlockLibraryPane extends React.Component<
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
 
-  private bossAndMinionButtons: ExtraButton<StatBlock>[] = [
+  private bossAndMinionButtons: ButtonInfo<StatBlock>[] = [
     {
       faClass: "chess-pawn",
       buttonClass: "minion",

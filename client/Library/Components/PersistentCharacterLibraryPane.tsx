@@ -10,7 +10,7 @@ import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ListingRow, MakeEditButton } from "./ListingRow";
 
 export type PersistentCharacterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -66,7 +66,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
       name={l.Listing().Name}
       showCount
       onAdd={this.loadSavedStatBlock}
-      onEdit={this.editStatBlock}
+      buttons={[MakeEditButton(this.editStatBlock)]}
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={l}

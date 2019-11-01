@@ -1,17 +1,20 @@
 import * as React from "react";
 
-interface Props {
+export interface CommonListingButtonProps {
   text?: string;
   buttonClass: string;
   faClass?: string;
-  onClick: React.MouseEventHandler<HTMLSpanElement>;
-  onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
-  onMouseLeave?: React.MouseEventHandler<HTMLSpanElement>;
   title?: string;
   children?: React.ReactNode;
 }
 
-export class ListingButton extends React.Component<Props> {
+interface ListingButtonProps extends CommonListingButtonProps {
+  onClick: React.MouseEventHandler<HTMLSpanElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLSpanElement>;
+}
+
+export class ListingButton extends React.Component<ListingButtonProps> {
   public render() {
     const text = this.props.text || "";
 

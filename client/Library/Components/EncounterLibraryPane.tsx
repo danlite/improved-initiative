@@ -52,8 +52,20 @@ export class EncounterLibraryPane extends React.Component<
       }
       name={listing.Listing().Name}
       onAdd={this.loadSavedEncounter}
-      onDelete={this.deleteListing}
-      onMove={this.moveListing}
+      buttons={[
+        {
+          title: "Delete",
+          buttonClass: "delete",
+          faClass: "trash",
+          onClick: this.deleteListing
+        },
+        {
+          title: "Move",
+          buttonClass: "move",
+          faClass: "folder",
+          onClick: this.moveListing
+        }
+      ]}
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={listing}

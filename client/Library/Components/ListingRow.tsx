@@ -3,28 +3,35 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Listing } from "../Listing";
+import { BoundListingButton } from "./BoundListingButton";
 import { ListingButton } from "./ListingButton";
 
-export interface ExtraButton<T extends Listable> {
-  title: string;
+export interface ButtonInfo<T extends Listable> {
+  title?: string;
   buttonClass: string;
   faClass: string;
   onClick: (listing: Listing<T>, modified?: boolean) => void;
 }
 
+export const MakeEditButton: <T extends Listable>(
+  onClick: ButtonInfo<T>["onClick"]
+) => ButtonInfo<T> = onClick => ({
+  title: "Edit",
+  buttonClass: "edit",
+  faClass: "edit",
+  onClick
+});
+
 export interface ListingProps<T extends Listable> {
   name: string;
   listing: Listing<T>;
   onAdd: (listing: Listing<T>, modified: boolean) => boolean;
-  onDelete?: (listing: Listing<T>) => void;
-  onEdit?: (listing: Listing<T>) => void;
-  onMove?: (listing: Listing<T>) => void;
   onPreview?: (
     listing: Listing<T>,
     e: React.MouseEvent<HTMLDivElement>
   ) => void;
   onPreviewOut?: (listing: Listing<T>) => void;
-  extraButtons?: ExtraButton<T>[];
+  buttons?: ButtonInfo<T>[];
   showCount?: boolean;
 }
 
@@ -45,20 +52,8 @@ export class ListingRow<T extends Listable> extends React.Component<
       });
     }
   };
-  private deleteFn = () => this.props.onDelete(this.props.listing);
-  private editFn = () => this.props.onEdit(this.props.listing);
-  private moveFn = () => this.props.onMove(this.props.listing);
   private previewFn = e => this.props.onPreview(this.props.listing, e);
   private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
-  private makeExtraButtonFn = (extraButton: ExtraButton<T>) => {
-    if (!extraButton.onClick) {
-      return undefined;
-    }
-
-    return (event: React.MouseEvent<HTMLSpanElement>) => {
-      extraButton.onClick(this.props.listing, event.altKey);
-    };
-  };
 
   constructor(props) {
     super(props);
@@ -83,37 +78,17 @@ export class ListingRow<T extends Listable> extends React.Component<
         >
           {countElements}
         </ListingButton>
-        {this.props.extraButtons &&
-          this.props.extraButtons.map((button, index) => (
-            <ListingButton
+        {this.props.buttons &&
+          this.props.buttons.map((button, index) => (
+            <BoundListingButton
               key={index}
+              listing={this.props.listing}
               title={button.title}
               buttonClass={button.buttonClass}
               faClass={button.faClass}
-              onClick={this.makeExtraButtonFn(button)}
+              onClick={button.onClick}
             />
           ))}
-        {this.props.onDelete && (
-          <ListingButton
-            buttonClass="delete"
-            faClass="trash"
-            onClick={this.deleteFn}
-          />
-        )}
-        {this.props.onEdit && (
-          <ListingButton
-            buttonClass="edit"
-            faClass="edit"
-            onClick={this.editFn}
-          />
-        )}
-        {this.props.onMove && (
-          <ListingButton
-            buttonClass="move"
-            faClass="folder"
-            onClick={this.moveFn}
-          />
-        )}
         {this.props.onPreview && (
           <ListingButton
             buttonClass="preview"
